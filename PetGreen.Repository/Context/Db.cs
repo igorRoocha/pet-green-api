@@ -13,22 +13,23 @@ namespace PetGreen.Repository.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Address>(new AddressMap().Configure);
+            modelBuilder.Entity<City>(new CityMap().Configure);
             modelBuilder.Entity<Clinic>(new ClinicMap().Configure);
-            modelBuilder.Entity<ClinicType>(new ClinicTypeMap().Configure);
             modelBuilder.Entity<Contact>(new ContactMap().Configure);
-            modelBuilder.Entity<MidiaSocial>(new MidiaSocialMap().Configure);
             modelBuilder.Entity<Profile>(new ProfileMap().Configure);
             modelBuilder.Entity<Schedule>(new SchedulesMap().Configure);
+            modelBuilder.Entity<State>(new StateMap().Configure);
             modelBuilder.Entity<User>(new UserMap().Configure);
         }
 
+        public DbSet<Address> Address { get; set; }
+        public DbSet<City> City { get; set; }
         public DbSet<Clinic> Clinic { get; set; }
-
-        public DbSet<ClinicType> ClinicType { get; set; }
         public DbSet<Contact> Contact { get; set; }
-        public DbSet<MidiaSocial> MidiaSocial { get; set; }
         public DbSet<Profile> Profile { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<State> State { get; set; }
         public DbSet<User> User { get; set; }
     }
 }

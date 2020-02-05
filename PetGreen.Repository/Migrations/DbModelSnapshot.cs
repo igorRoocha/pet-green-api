@@ -19,12 +19,81 @@ namespace PetGreen.Repository.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("PetGreen.Domain.Entities.Clinic", b =>
+            modelBuilder.Entity("PetGreen.Domain.Entities.Address", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ClinicTypeID");
+                    b.Property<string>("Cep")
+                        .IsRequired()
+                        .HasColumnName("Cep");
+
+                    b.Property<Guid>("CityID");
+
+                    b.Property<string>("Complement")
+                        .HasColumnName("Complement");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<DateTime?>("DeletedAt");
+
+                    b.Property<string>("Neighborhood")
+                        .IsRequired()
+                        .HasColumnName("Neighborhood");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnName("Number");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnName("Street");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CityID");
+
+                    b.ToTable("CDAddress");
+                });
+
+            modelBuilder.Entity("PetGreen.Domain.Entities.City", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<DateTime?>("DeletedAt");
+
+                    b.Property<string>("IBGE")
+                        .IsRequired()
+                        .HasColumnName("IBGE");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name");
+
+                    b.Property<Guid>("StateID");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("StateID");
+
+                    b.ToTable("CDCity");
+                });
+
+            modelBuilder.Entity("PetGreen.Domain.Entities.Clinic", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnName("CreatedAt");
@@ -60,29 +129,7 @@ namespace PetGreen.Repository.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ClinicTypeID");
-
                     b.ToTable("CDClinic");
-                });
-
-            modelBuilder.Entity("PetGreen.Domain.Entities.ClinicType", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<DateTime?>("DeletedAt");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnName("Description");
-
-                    b.Property<DateTime?>("UpdatedAt");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("CDClinicType");
                 });
 
             modelBuilder.Entity("PetGreen.Domain.Entities.Contact", b =>
@@ -111,30 +158,6 @@ namespace PetGreen.Repository.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("CDContact");
-                });
-
-            modelBuilder.Entity("PetGreen.Domain.Entities.MidiaSocial", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("ClinicID");
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<DateTime?>("DeletedAt");
-
-                    b.Property<string>("URL")
-                        .IsRequired()
-                        .HasColumnName("URL");
-
-                    b.Property<DateTime?>("UpdatedAt");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ClinicID");
-
-                    b.ToTable("CDMidiaSocial");
                 });
 
             modelBuilder.Entity("PetGreen.Domain.Entities.Profile", b =>
@@ -189,6 +212,32 @@ namespace PetGreen.Repository.Migrations
                     b.ToTable("CDSchedules");
                 });
 
+            modelBuilder.Entity("PetGreen.Domain.Entities.State", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<DateTime?>("DeletedAt");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name");
+
+                    b.Property<string>("UF")
+                        .IsRequired()
+                        .HasColumnName("UF");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("CDState");
+                });
+
             modelBuilder.Entity("PetGreen.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("ID")
@@ -236,11 +285,20 @@ namespace PetGreen.Repository.Migrations
                     b.ToTable("CDUser");
                 });
 
-            modelBuilder.Entity("PetGreen.Domain.Entities.Clinic", b =>
+            modelBuilder.Entity("PetGreen.Domain.Entities.Address", b =>
                 {
-                    b.HasOne("PetGreen.Domain.Entities.ClinicType", "ClinicType")
-                        .WithMany("Clinics")
-                        .HasForeignKey("ClinicTypeID");
+                    b.HasOne("PetGreen.Domain.Entities.City", "City")
+                        .WithMany("Addresses")
+                        .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("PetGreen.Domain.Entities.City", b =>
+                {
+                    b.HasOne("PetGreen.Domain.Entities.State", "State")
+                        .WithMany("Cities")
+                        .HasForeignKey("StateID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PetGreen.Domain.Entities.Contact", b =>
@@ -252,14 +310,6 @@ namespace PetGreen.Repository.Migrations
                     b.HasOne("PetGreen.Domain.Entities.User", "User")
                         .WithMany("Contacts")
                         .HasForeignKey("UserID");
-                });
-
-            modelBuilder.Entity("PetGreen.Domain.Entities.MidiaSocial", b =>
-                {
-                    b.HasOne("PetGreen.Domain.Entities.Clinic", "Clinic")
-                        .WithMany("MidiaSocial")
-                        .HasForeignKey("ClinicID")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PetGreen.Domain.Entities.Schedule", b =>

@@ -15,7 +15,6 @@ namespace PetGreen.Domain.Entities
             Name = name;
             TaxId = taxId;
             Email = email;
-            MidiaSocial = new List<MidiaSocial>();
             Schedules = new List<Schedule>();
             Users = new List<User>();
             Contacts = new List<Contact>();
@@ -36,14 +35,9 @@ namespace PetGreen.Domain.Entities
 
         public string Facebook { get; private set; }
 
-        public ClinicType ClinicType { get; set; }
-
         public IReadOnlyCollection<User> Users { get; private set; }
 
-        public IReadOnlyCollection<MidiaSocial> MidiaSocial { get; private set; }
-
         public IReadOnlyCollection<Contact> Contacts { get; private set; }
-
 
         public IReadOnlyCollection<Schedule> Schedules { get; private set; }
 

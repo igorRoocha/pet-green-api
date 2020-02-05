@@ -36,9 +36,6 @@ namespace PetGreen.Repository.Mapping
             builder.HasMany(c => c.Users)
                    .WithOne(c => c.Clinic);
 
-            builder.HasMany(c => c.MidiaSocial)
-                   .WithOne(c => c.Clinic);
-
             builder.HasMany(c => c.Schedules)
                    .WithOne(c => c.Clinic)
                    .IsRequired();

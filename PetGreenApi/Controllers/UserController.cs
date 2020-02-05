@@ -17,7 +17,7 @@ using PetGreen.Domain.DTO;
 using PetGreen.Application.Services;
 using PetGreen.Application.Validators;
 
-namespace PetGreen.API.Controllers
+namespace PetGreenApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
