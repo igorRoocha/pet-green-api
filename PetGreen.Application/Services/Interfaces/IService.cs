@@ -8,9 +8,9 @@ namespace PetGreen.Services.Interfaces
 {
     public interface IService<T> where T : BaseEntity
     {
-        Task<T> Post<V>(T obj) where V : AbstractValidator<T>;
+        T Post<V>(T obj) where V : AbstractValidator<T>;
 
-        Task<T> Put<V>(T obj) where V : AbstractValidator<T>;
+        T Put<V>(T obj) where V : AbstractValidator<T>;
 
         Task Remove(Guid id);
 

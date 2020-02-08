@@ -15,7 +15,7 @@ namespace PetGreen.Application.Validators
                 throw new ArgumentNullException("Can't found the object.");
             });
 
-            RuleFor(c => c.Day)
+            RuleFor(c => c.Days)
              .NotEmpty().WithMessage("The day is empty.")
              .NotNull().WithMessage("The day is null.");
 

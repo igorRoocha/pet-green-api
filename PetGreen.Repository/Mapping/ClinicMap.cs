@@ -33,13 +33,6 @@ namespace PetGreen.Repository.Mapping
             builder.Property(c => c.Facebook)
                    .HasColumnName("Facebook");
 
-            builder.HasMany(c => c.Users)
-                   .WithOne(c => c.Clinic);
-
-            builder.HasMany(c => c.Schedules)
-                   .WithOne(c => c.Clinic)
-                   .IsRequired();
-
             builder.Property(c => c.CreatedAt)
                    .IsRequired()
                    .HasColumnName("CreatedAt");
@@ -49,6 +42,8 @@ namespace PetGreen.Repository.Mapping
 
             builder.Property(c => c.DeletedAt)
                    .HasColumnName("DeletedAt");
+
+            builder.Ignore(c => c.Users);
         }
     }
 }

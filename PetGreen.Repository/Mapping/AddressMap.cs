@@ -40,6 +40,18 @@ namespace PetGreen.Repository.Mapping
 
             builder.Property(a => a.UpdatedAt)
                    .HasColumnName("UpdatedAt");
+
+            builder.HasOne(a => a.City)
+                   .WithMany(c => c.Addresses)
+                   .IsRequired();
+
+            builder.HasOne(c => c.Clinic)
+                   .WithOne(a => a.Address)
+                   .HasForeignKey<Clinic>(c => c.AddressID)
+                   .IsRequired();
+
+            builder.Ignore(a => a.City);
+            builder.Ignore(a => a.Clinic);
         }
     }
 }

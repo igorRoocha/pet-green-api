@@ -20,10 +20,6 @@ namespace PetGreen.Repository.Mapping
                    .IsRequired()
                    .HasColumnName("UF");
 
-            builder.HasMany(s => s.Cities)
-                   .WithOne(s => s.State)
-                   .IsRequired();
-
             builder.Property(s => s.CreatedAt)
                    .IsRequired()
                    .HasColumnName("CreatedAt");

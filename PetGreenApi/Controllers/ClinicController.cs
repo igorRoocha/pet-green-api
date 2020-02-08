@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PetGreen.Application.Services;
+using PetGreen.Application.Services.Services;
 using PetGreen.Domain.DTO;
 using PetGreen.Domain.Entities;
 using PetGreen.Repository.Context;
@@ -14,7 +15,7 @@ namespace PetGreenApi.Controllers
     [ApiController]
     public class ClinicController : ControllerBase
     {
-        private readonly BaseService<Clinic> _clinicService;
+        private readonly ClinicService _clinicService;
         private readonly BaseService<Contact> _contactService;
         private readonly Db _context;
         private readonly IConfiguration _configuration;
@@ -22,7 +23,7 @@ namespace PetGreenApi.Controllers
         public ClinicController(Db context, IConfiguration configuration)
         {
             _context = context;
-            _clinicService = new BaseService<Clinic>(context);
+            _clinicService = new ClinicService(context);
             _contactService = new BaseService<Contact>(context);
             _configuration = configuration;
         }
@@ -37,7 +38,7 @@ namespace PetGreenApi.Controllers
 
             try
             {
-                return StatusCode((int)HttpStatusCode.Created);
+                return StatusCode((int)_clinicService.Register(dto));
             }
             catch (Exception ex)
             {

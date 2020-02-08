@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PetGreen.Domain.Entities;
 
 namespace PetGreen.Domain.DTO
@@ -13,7 +14,7 @@ namespace PetGreen.Domain.DTO
 
         public string Password { get; set; }
 
-        public string Contact { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         public string Token { get; set; }
 

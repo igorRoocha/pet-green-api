@@ -23,8 +23,9 @@ namespace PetGreen.Repository.Mapping
                    .IsRequired()
                    .HasColumnName("IBGE");
 
-            builder.HasMany(c => c.Addresses)
-                   .WithOne(c => c.City)
+            builder.HasOne(c => c.State)
+                   .WithMany(c => c.Cities)
+                   .HasForeignKey(c => c.StateID)
                    .IsRequired();
 
             builder.Property(c => c.CreatedAt)
@@ -33,6 +34,8 @@ namespace PetGreen.Repository.Mapping
 
             builder.Property(c => c.UpdatedAt)
                    .HasColumnName("UpdatedAt");
+
+            builder.Ignore(c => c.State);
         }
     }
 }

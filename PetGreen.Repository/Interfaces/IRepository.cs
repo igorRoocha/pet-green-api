@@ -7,9 +7,9 @@ namespace PetGreen.Repository.Interfaces
 {
     public interface IRepository<T> where T : BaseEntity
     {
-        Task Add(T obj);
+        void Add(T obj);
 
-        Task Update(T obj);
+        void Update(T obj);
 
         Task Remove(Guid id);
 

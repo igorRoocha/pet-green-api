@@ -95,6 +95,8 @@ namespace PetGreen.Repository.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("AddressID");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnName("CreatedAt");
 
@@ -129,6 +131,8 @@ namespace PetGreen.Repository.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("AddressID");
+
                     b.ToTable("CDClinic");
                 });
 
@@ -138,6 +142,9 @@ namespace PetGreen.Repository.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<Guid?>("ClinicID");
+
+                    b.Property<string>("ContactType")
+                        .HasColumnName("ContactType");
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -189,7 +196,7 @@ namespace PetGreen.Repository.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("Day")
+                    b.Property<string>("Days")
                         .IsRequired()
                         .HasColumnName("Day");
 
@@ -287,7 +294,7 @@ namespace PetGreen.Repository.Migrations
 
             modelBuilder.Entity("PetGreen.Domain.Entities.Address", b =>
                 {
-                    b.HasOne("PetGreen.Domain.Entities.City", "City")
+                    b.HasOne("PetGreen.Domain.Entities.City")
                         .WithMany("Addresses")
                         .HasForeignKey("CityID")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -295,19 +302,27 @@ namespace PetGreen.Repository.Migrations
 
             modelBuilder.Entity("PetGreen.Domain.Entities.City", b =>
                 {
-                    b.HasOne("PetGreen.Domain.Entities.State", "State")
+                    b.HasOne("PetGreen.Domain.Entities.State")
                         .WithMany("Cities")
                         .HasForeignKey("StateID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("PetGreen.Domain.Entities.Clinic", b =>
+                {
+                    b.HasOne("PetGreen.Domain.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("PetGreen.Domain.Entities.Contact", b =>
                 {
-                    b.HasOne("PetGreen.Domain.Entities.Clinic", "Clinic")
+                    b.HasOne("PetGreen.Domain.Entities.Clinic")
                         .WithMany("Contacts")
                         .HasForeignKey("ClinicID");
 
-                    b.HasOne("PetGreen.Domain.Entities.User", "User")
+                    b.HasOne("PetGreen.Domain.Entities.User")
                         .WithMany("Contacts")
                         .HasForeignKey("UserID");
                 });

@@ -7,7 +7,7 @@ using PetGreen.Repository;
 using PetGreen.Repository.Context;
 using PetGreen.Services.Interfaces;
 
-namespace PetGreen.Application.Services
+namespace PetGreen.Application.Services.Services
 {
     public class BaseService<T> : IService<T> where T : BaseEntity
     {
@@ -20,19 +20,19 @@ namespace PetGreen.Application.Services
             repository = new BaseRepository<T>(context);
         }
 
-        public async Task<T> Post<V>(T obj) where V : AbstractValidator<T>
+        public T Post<V>(T obj) where V : AbstractValidator<T>
         {
             Validate(obj, Activator.CreateInstance<V>());
 
-            await repository.Add(obj);
+            repository.Add(obj);
             return obj;
         }
 
-        public async Task<T> Put<V>(T obj) where V : AbstractValidator<T>
+        public T Put<V>(T obj) where V : AbstractValidator<T>
         {
             Validate(obj, Activator.CreateInstance<V>());
 
-            await repository.Update(obj);
+            repository.Update(obj);
             return obj;
         }
 

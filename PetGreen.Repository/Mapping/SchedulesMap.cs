@@ -10,22 +10,23 @@ namespace PetGreen.Repository.Mapping
         {
             builder.ToTable("CDSchedules");
 
-            builder.HasKey(c => c.ID);
+            builder.HasKey(s => s.ID);
 
-            builder.Property(c => c.Day)
+            builder.Property(s => s.Days)
                    .IsRequired()
                    .HasColumnName("Day");
 
-            builder.Property(c => c.StartHour)
+            builder.Property(s => s.StartHour)
                    .IsRequired()
                    .HasColumnName("StartHour");
             
-            builder.Property(c => c.EndHour)
+            builder.Property(s => s.EndHour)
                    .IsRequired()
                    .HasColumnName("EndHour");
             
-            builder.HasOne(c => c.Clinic)
-                   .WithMany(c => c.Schedules)
+            builder.HasOne(s => s.Clinic)
+                   .WithMany(s => s.Schedules)
+                   .HasForeignKey(s => s.ClinicID)
                    .IsRequired();
         }
     }

@@ -8,19 +8,20 @@ namespace PetGreen.Domain.Entities
     [Table("CDSchedule")]
     public class Schedule : BaseEntity, ISchedules
     {
-        public Schedule(string day, string startHour, string endHour)
+        public Schedule()
         {
-            Day = day;
-            StartHour = startHour;
-            EndHour = endHour;
+            CreatedAt = DateTime.UtcNow;
         }
 
-        public string Day { get; private set; }
+        public string Days { get; set; }
 
-        public string StartHour { get; private set; }
+        public string StartHour { get; set; }
 
-        public string EndHour { get; private set; }
+        public string EndHour { get; set; }
+        public Guid ClinicID { get; set; }
 
-        public Clinic Clinic { get; private set; }
+        public virtual Clinic Clinic { get; set; }
+
+        public void Update(Clinic clinic) => Clinic = clinic; 
     }
 }

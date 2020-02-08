@@ -28,9 +28,11 @@ namespace PetGreen.Domain.Entities
         [JsonIgnore]
         public byte[] PasswordSalt { get; set; }
 
-        public Profile Profile { get; set; }
+        public Guid ProfileID { get; set; }
+        public virtual Profile Profile { get; set; }
 
-        public Clinic Clinic { get; set; }
+        public Guid? ClinicID { get; set; }
+        public virtual Clinic Clinic { get; set; }
 
         public IReadOnlyCollection<Contact> Contacts { get; set; }
 
@@ -51,6 +53,12 @@ namespace PetGreen.Domain.Entities
             DeletedAt = deletedAt;
         }
 
+        /// <summary>
+        /// Convert o objeto UserDTO para a entidade User
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         public User FillUser(User user, UserDto dto)
         {
             foreach (var property in dto.GetType().GetProperties())

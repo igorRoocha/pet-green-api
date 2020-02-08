@@ -18,22 +18,22 @@ namespace PetGreen.Repository
             _context = context;
         }
 
-        public async Task Add(T obj)
+        public void Add(T obj)
         {
-            await _context.Set<T>().AddAsync(obj);
-            await _context.SaveChangesAsync();
+            _context.Set<T>().Add(obj);
+            _context.SaveChanges();
         }
 
-        public async Task Update(T obj)
+        public void Update(T obj)
         {
             _context.Entry(obj).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public async Task Remove(Guid id)
         {
             _context.Set<T>().Remove(await Get(id));
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public async Task<IList<T>> Get()
