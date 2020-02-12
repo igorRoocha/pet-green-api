@@ -1,5 +1,4 @@
 using System;
-using PetGreen.Entities.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using PetGreen.Domain.DTO;
@@ -8,7 +7,7 @@ using Newtonsoft.Json;
 namespace PetGreen.Domain.Entities
 {
     [Table("CDUser")]
-    public class User : BaseEntity, IUser
+    public class User : BaseEntity
     {
         public User()
         {

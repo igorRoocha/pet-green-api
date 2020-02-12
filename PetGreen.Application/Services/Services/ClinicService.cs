@@ -64,14 +64,21 @@ namespace PetGreen.Application.Services.Services
         /// <returns></returns>
         private bool ClinicExists(ClinicDto dto)
         {
-            Clinic clinic = (from c in _context.Clinic
-                             where c.TaxId == Utils.RemoveMask(dto.TaxId)
-                             select c).FirstOrDefault();
+            try
+            {
+                Clinic clinic = (from c in _context.Clinic
+                                 where c.TaxId == Utils.RemoveMask(dto.TaxId)
+                                 select c).FirstOrDefault();
 
-            if (clinic != null)
-                return true;
+                if (clinic != null)
+                    return true;
 
-            return false;
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Text;
 namespace PetGreen.Domain.Entities
 {
     [Table("CDAddress")]
-    public class Address: BaseEntity, IAddress
+    public class Address: BaseEntity
     {
         public Address()
         {

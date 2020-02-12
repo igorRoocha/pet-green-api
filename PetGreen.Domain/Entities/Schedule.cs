@@ -6,7 +6,7 @@ using PetGreen.Entities.Interfaces;
 namespace PetGreen.Domain.Entities
 {
     [Table("CDSchedule")]
-    public class Schedule : BaseEntity, ISchedules
+    public class Schedule : BaseEntity
     {
         public Schedule()
         {

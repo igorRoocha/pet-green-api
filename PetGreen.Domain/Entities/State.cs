@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PetGreen.Domain.Entities
 {
     [Table("CDState")]
-    public class State: BaseEntity, IState
+    public class State: BaseEntity
     {
         public State()
         {

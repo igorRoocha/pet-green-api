@@ -187,6 +187,28 @@ namespace PetGreen.Repository.Migrations
                     b.ToTable("CDProfile");
                 });
 
+            modelBuilder.Entity("PetGreen.Domain.Entities.Register.Specie", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<DateTime?>("DeletedAt");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("CDSpecie");
+                });
+
             modelBuilder.Entity("PetGreen.Domain.Entities.Schedule", b =>
                 {
                     b.Property<Guid>("ID")

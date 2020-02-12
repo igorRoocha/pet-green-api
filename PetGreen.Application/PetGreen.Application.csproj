@@ -22,4 +22,8 @@
     <ProjectReference Include="..\PetGreen.Repository\PetGreen.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Interfaces\Register\" />
+  </ItemGroup>
+
 </Project>
