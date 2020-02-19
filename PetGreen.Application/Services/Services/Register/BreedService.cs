@@ -1,8 +1,11 @@
-﻿using PetGreen.Application.Services.Validators.Register;
+﻿using Microsoft.EntityFrameworkCore;
+using PetGreen.Application.Services.Interfaces.Register;
+using PetGreen.Application.Services.Validators.Register;
 using PetGreen.Domain.Entities;
 using PetGreen.Domain.Entities.Register;
 using PetGreen.Repository.Context;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -10,32 +13,34 @@ using System.Threading.Tasks;
 
 namespace PetGreen.Application.Services.Services.Register
 {
-    public class SpecieService: BaseEntity
+    public class BreedService : BaseEntity, IBreedService
     {
-        private readonly BaseService<Specie> _specieService;
+        private readonly BaseService<Breed> _baseService;
         private readonly Db _context;
 
-        public SpecieService(Db context)
+        public BreedService(Db context)
         {
             _context = context;
-            _specieService = new BaseService<Specie>(context);
+            _baseService = new BaseService<Breed>(context);
         }
 
         /// <summary>
-        /// Adiciona um novo registro na tabela CDSpecie
+        /// Adiciona um novo registro na tabela CDBreed
         /// </summary>
-        /// <param name="specie"></param>
+        /// <param name="breed"></param>
         /// <returns></returns>
-        public async Task<HttpStatusCode> Register(Specie specie)
+        public async Task<HttpStatusCode> Register(Breed breed)
         {
             using (var tran = _context.Database.BeginTransaction())
             {
                 try
                 {
-                    if (SpecieExists(specie))
+                    if (BreedExists(breed))
                         return HttpStatusCode.Conflict;
 
-                    _specieService.Post<SpecieValidator>(specie);
+                    breed.SpecieID = breed.Specie.ID;
+                    //breed.Specie = null;
+                    _baseService.Post<BreedValidator>(breed);
                     tran.Commit();
                     return HttpStatusCode.Created;
                 }
@@ -48,19 +53,19 @@ namespace PetGreen.Application.Services.Services.Register
         }
 
         /// <summary>
-        /// Verifica se a espécie que está sendo cadastrada já existe na base de dados
+        /// Verifica se a raça que está sendo cadastrada já existe na base de dados
         /// </summary>
         /// <param name="specie"></param>
         /// <returns></returns>
-        private bool SpecieExists(Specie specie)
+        private bool BreedExists(Breed breed)
         {
             try
             {
-                specie = (from s in _context.Specie
-                                 where s.Name == specie.Name
-                                 select s).FirstOrDefault();
+                breed = (from s in _context.Breed
+                         where s.Name == breed.Name
+                         select s).FirstOrDefault();
 
-                if (specie != null)
+                if (breed != null)
                     return true;
 
                 return false;

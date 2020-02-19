@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace PetGreen.Domain.Entities.Register
 {
-    public class Specie: BaseEntity
+    public class Breed : BaseEntity
     {
-        public Specie()
+        public Breed()
         {
             CreatedAt = DateTime.UtcNow;
         }
+
         public string Name { get; set; }
 
-        public virtual List<Breed> Breeds { get; private set; }
+        public Guid SpecieID { get; set; }
+
+        [ForeignKey("SpecieID")]
+        public Specie Specie { get; set; }
     }
 }

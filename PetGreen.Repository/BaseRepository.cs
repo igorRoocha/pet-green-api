@@ -20,6 +20,8 @@ namespace PetGreen.Repository
 
         public void Add(T obj)
         {
+            _context.Attach(obj);
+            _context.Entry(obj).State = EntityState.Added;
             _context.Set<T>().Add(obj);
             _context.SaveChanges();
         }

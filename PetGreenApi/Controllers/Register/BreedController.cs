@@ -1,7 +1,8 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using PetGreen.Application.Services.Services;
@@ -14,23 +15,23 @@ namespace PetGreenApi.Controllers.Register
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SpecieController : ControllerBase
+    public class BreedController : ControllerBase
     {
-        private readonly SpecieService _specieService;
-        private readonly BaseService<Specie> _baseService;
+        private readonly BaseService<Breed> _baseService;
+        private readonly BreedService _breedService;
         private readonly Db _context;
         private readonly IConfiguration _configuration;
 
-        public SpecieController(Db context, IConfiguration configuration)
+        public BreedController(Db context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
-            _specieService = new SpecieService(context);
-            _baseService = new BaseService<Specie>(context);
+            _baseService = new BaseService<Breed>(context);
+            _breedService = new BreedService(context);
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] Specie specie)
+        public async Task<IActionResult> Register([FromBody] Breed breed)
         {
             if (!ModelState.IsValid)
             {
@@ -39,7 +40,7 @@ namespace PetGreenApi.Controllers.Register
 
             try
             {
-                return StatusCode((int) await _specieService.Register(specie));
+                return StatusCode((int)await _breedService.Register(breed));
             }
             catch (Exception ex)
             {
@@ -52,7 +53,7 @@ namespace PetGreenApi.Controllers.Register
         {
             try
             {
-                return Ok(await _baseService.Get());
+                return new ObjectResult(await _context.Breed.AsNoTracking().Include("Specie").OrderBy(b => b.Name).ToListAsync());
             }
             catch (Exception ex)
             {
@@ -61,11 +62,11 @@ namespace PetGreenApi.Controllers.Register
         }
 
         [HttpPut]
-        public async Task<IActionResult> Edit([FromBody] Specie specie)
+        public async Task<IActionResult> Edit([FromBody] Breed breed)
         {
             try
             {
-                _baseService.Put<SpecieValidator>(specie);
+                _baseService.Put<BreedValidator>(breed);
                 return StatusCode((int)HttpStatusCode.OK);
             }
             catch (Exception ex)

@@ -187,6 +187,32 @@ namespace PetGreen.Repository.Migrations
                     b.ToTable("CDProfile");
                 });
 
+            modelBuilder.Entity("PetGreen.Domain.Entities.Register.Breed", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<DateTime?>("DeletedAt");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name");
+
+                    b.Property<Guid>("SpecieID");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnName("UpdatedAt");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("SpecieID");
+
+                    b.ToTable("CDBreed");
+                });
+
             modelBuilder.Entity("PetGreen.Domain.Entities.Register.Specie", b =>
                 {
                     b.Property<Guid>("ID")
@@ -347,6 +373,14 @@ namespace PetGreen.Repository.Migrations
                     b.HasOne("PetGreen.Domain.Entities.User")
                         .WithMany("Contacts")
                         .HasForeignKey("UserID");
+                });
+
+            modelBuilder.Entity("PetGreen.Domain.Entities.Register.Breed", b =>
+                {
+                    b.HasOne("PetGreen.Domain.Entities.Register.Specie", "Specie")
+                        .WithMany("Breeds")
+                        .HasForeignKey("SpecieID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PetGreen.Domain.Entities.Schedule", b =>
