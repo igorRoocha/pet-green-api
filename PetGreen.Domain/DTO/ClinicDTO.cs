@@ -16,5 +16,6 @@ namespace PetGreen.Domain.DTO
         public Address Address { get; set; }
         public List<Contact> Contacts { get; set; }
         public List<Schedule> Schedules { get; set; }
+        public Guid UserID { get; set; }
     }
 }

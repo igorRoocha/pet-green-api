@@ -15,6 +15,7 @@ namespace PetGreen.Application.Services.Services
     public class ClinicService : BaseEntity, IClinicService
     {
         private readonly BaseService<Clinic> _clinicService;
+        private readonly BaseService<User> _userService;
         private readonly AddressService _addressService;
         private readonly Db _context;
 
@@ -23,6 +24,7 @@ namespace PetGreen.Application.Services.Services
             _context = context;
             _clinicService = new BaseService<Clinic>(context);
             _addressService = new AddressService(context);
+            _userService = new BaseService<User>(context);
         }
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace PetGreen.Application.Services.Services
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        public HttpStatusCode Register(ClinicDto dto)
+        public async Task<HttpStatusCode> Register(ClinicDto dto)
         {
             using (var tran = _context.Database.BeginTransaction())
             {
@@ -45,6 +47,8 @@ namespace PetGreen.Application.Services.Services
                     _addressService.Register(dto.Address);
                     clinic.AddressID = dto.Address.ID;
                     _clinicService.Post<ClinicValidator>(clinic);
+
+                     await UpdateUser(clinic.ID, dto.UserID);
 
                     tran.Commit();
                     return HttpStatusCode.Created;
@@ -79,6 +83,19 @@ namespace PetGreen.Application.Services.Services
             {
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Atualiza o "CliniID" do usuário que está cadastrando a empresa no sistema
+        /// </summary>
+        /// <param name="clinicID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        private async Task UpdateUser(Guid clinicID, Guid userID)
+        {
+            User user = await _context.User.Include("Profile").Where(u => u.ID == userID).FirstOrDefaultAsync();
+            user.ClinicID = clinicID;
+            _userService.Put<UserValidator>(user);
         }
     }
 }

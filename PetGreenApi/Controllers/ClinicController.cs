@@ -29,7 +29,7 @@ namespace PetGreenApi.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] ClinicDto dto)
+        public async Task<IActionResult> Register([FromBody] ClinicDto dto)
         {
             if (!ModelState.IsValid)
             {
@@ -38,7 +38,7 @@ namespace PetGreenApi.Controllers
 
             try
             {
-                return StatusCode((int)_clinicService.Register(dto));
+                return StatusCode((int)await _clinicService.Register(dto));
             }
             catch (Exception ex)
             {
