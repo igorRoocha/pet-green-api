@@ -2,7 +2,10 @@
 using PetGreen.Application.Services.Validators;
 using PetGreen.Domain.Entities;
 using PetGreen.Repository.Context;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PetGreen.Application.Services.Services
 {
@@ -54,6 +57,25 @@ namespace PetGreen.Application.Services.Services
                 _baseService.Post<AddressValidator>(address);
             }
             catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Remove os registros de endereços que estão na tabela CDAddress
+        /// </summary>
+        /// <param name="addresses"></param>
+        public async Task Remove(IReadOnlyCollection<Address> addresses)
+        {
+            try
+            {
+                foreach(Address address in addresses)
+                {
+                    await _baseService.Remove(address.ID);
+                }
+            }
+            catch (Exception)
             {
                 throw;
             }

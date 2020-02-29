@@ -67,6 +67,7 @@ namespace PetGreenApi.Controllers
                     Token = tokenHandler.WriteToken(tokenGeneretade),
                     Email = user.Email,
                     Name = user.Name,
+                    ClinicID = user.ClinicID != Guid.Empty ? (Guid)user.ClinicID : Guid.Empty,
                     Profile = user.Profile
                 });
             }

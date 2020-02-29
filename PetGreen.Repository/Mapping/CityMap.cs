@@ -35,7 +35,6 @@ namespace PetGreen.Repository.Mapping
             builder.Property(c => c.UpdatedAt)
                    .HasColumnName("UpdatedAt");
 
-            builder.Ignore(c => c.State);
         }
     }
 }

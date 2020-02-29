@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using PetGreen.Domain;
 using PetGreen.Domain.DTO;
 using PetGreen.Domain.Entities;
+using PetGreen.Domain.Entities.Register;
 using PetGreen.Domain.Models;
 using PetGreen.Entities.Interfaces;
 
@@ -48,6 +49,8 @@ namespace PetGreen.Domain.Entities
         public IReadOnlyCollection<Contact> Contacts { get; private set; }
 
         public IReadOnlyCollection<Schedule> Schedules { get; private set; }
+
+        public IReadOnlyCollection<Caterer> Caterers { get; set; }
 
         public Guid AddressID { get; set; }
 

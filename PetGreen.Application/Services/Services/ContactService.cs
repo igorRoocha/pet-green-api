@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PetGreen.Application.Services.Services
 {
@@ -36,6 +37,25 @@ namespace PetGreen.Application.Services.Services
                 }
             }
             catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Remove os registros de contatos que estão na tabela CDAddress a partir da lista enviada
+        /// </summary>
+        /// <param name="contatos"></param>
+        public async Task Remove(IReadOnlyCollection<Contact> contacts)
+        {
+            try
+            {
+                foreach (Contact contact in contacts)
+                {
+                    await _baseService.Remove(contact.ID);
+                }
+            }
+            catch (Exception)
             {
                 throw;
             }

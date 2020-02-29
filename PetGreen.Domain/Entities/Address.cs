@@ -1,14 +1,12 @@
-﻿using PetGreen.Domain.Entities.Interfaces;
+﻿using PetGreen.Domain.Entities.Register;
 using PetGreen.Domain.Models;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace PetGreen.Domain.Entities
 {
     [Table("CDAddress")]
-    public class Address: BaseEntity
+    public class Address : BaseEntity
     {
         public Address()
         {
@@ -17,7 +15,7 @@ namespace PetGreen.Domain.Entities
         private string _Cep;
 
         public string Cep
-        {   get => _Cep;
+        { get => _Cep;
             set
             {
                 _Cep = Utils.RemoveMask(value);
@@ -28,9 +26,9 @@ namespace PetGreen.Domain.Entities
         public string Neighborhood { get; set; }
         public string Complement { get; set; }
         public Guid CityID { get; set; }
-        [NotMapped]
         public virtual City City { get; set; }
-        [NotMapped]
         public virtual Clinic Clinic { get; set; }
+        public Guid? CatererID { get; set; }
+        public virtual Caterer Caterer {get; set;}
     }
 }

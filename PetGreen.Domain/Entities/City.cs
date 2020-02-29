@@ -16,9 +16,7 @@ namespace PetGreen.Domain.Entities
         public string Name { get; set; }
         public string IBGE { get; set; }
         public Guid StateID { get; set; }
-        [NotMapped]
         public IReadOnlyCollection<Address> Addresses { get; private set; }
-        [NotMapped]
         public virtual State State { get; set; }
     }
 }

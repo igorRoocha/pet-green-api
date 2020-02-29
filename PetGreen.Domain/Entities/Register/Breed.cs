@@ -17,6 +17,6 @@ namespace PetGreen.Domain.Entities.Register
         public Guid SpecieID { get; set; }
 
         [ForeignKey("SpecieID")]
-        public Specie Specie { get; set; }
+        public virtual Specie Specie { get; set; }
     }
 }

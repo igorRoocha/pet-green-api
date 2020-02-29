@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetGreen.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PetGreen.Repository.Mapping
 {
@@ -49,9 +46,6 @@ namespace PetGreen.Repository.Mapping
                    .WithOne(a => a.Address)
                    .HasForeignKey<Clinic>(c => c.AddressID)
                    .IsRequired();
-
-            builder.Ignore(a => a.City);
-            builder.Ignore(a => a.Clinic);
         }
     }
 }

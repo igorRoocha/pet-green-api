@@ -16,7 +16,6 @@ namespace PetGreenApi.Controllers
     public class ClinicController : ControllerBase
     {
         private readonly ClinicService _clinicService;
-        private readonly BaseService<Contact> _contactService;
         private readonly Db _context;
         private readonly IConfiguration _configuration;
 
@@ -24,7 +23,6 @@ namespace PetGreenApi.Controllers
         {
             _context = context;
             _clinicService = new ClinicService(context);
-            _contactService = new BaseService<Contact>(context);
             _configuration = configuration;
         }
 

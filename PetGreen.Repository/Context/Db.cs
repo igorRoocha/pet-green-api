@@ -18,6 +18,7 @@ namespace PetGreen.Repository.Context
             #region Register
             modelBuilder.Entity<Address>(new AddressMap().Configure);
             modelBuilder.Entity<Breed>(new BreedMap().Configure);
+            modelBuilder.Entity<Caterer>(new CatererMap().Configure);
             modelBuilder.Entity<City>(new CityMap().Configure);
             modelBuilder.Entity<Clinic>(new ClinicMap().Configure);
             modelBuilder.Entity<Contact>(new ContactMap().Configure);
@@ -32,6 +33,7 @@ namespace PetGreen.Repository.Context
         #region Register
         public DbSet<Address> Address { get; set; }
         public DbSet<Breed> Breed { get; set; }
+        public DbSet<Caterer> Caterer { get; set; }
         public DbSet<City> City { get; set; }
         public DbSet<Clinic> Clinic { get; set; }
         public DbSet<Contact> Contact { get; set; }

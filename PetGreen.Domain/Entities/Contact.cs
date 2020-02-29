@@ -1,4 +1,5 @@
 using PetGreen.Domain.Entities.Interfaces;
+using PetGreen.Domain.Entities.Register;
 using PetGreen.Domain.Models;
 using PetGreen.Entities;
 using System;
@@ -30,6 +31,8 @@ namespace PetGreen.Domain.Entities
         public virtual Clinic Clinic { get; set; }
         public Guid? UserID { get; set; }
         public virtual User User {get; set; }
+        public Guid? CatererID { get; set; }
+        public virtual Caterer Caterer { get; set; }
         public void Update(User user) => User = user;
     }
 }
