@@ -47,11 +47,26 @@ namespace PetGreenApi.Controllers.Register
             }
         }
 
+        [HttpPut]
+        public async Task<IActionResult> Edit([FromBody] CatererDTO dto)
+        {
+            try
+            {
+                await _catererService.Edit(dto);
+                return StatusCode((int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
         [HttpGet("getByClinicID")]
         public async Task<IActionResult> GetByClinicID(Guid clinicID)
         {
             try
             {
+                var obj = await _catererService.GetByClinicID(clinicID);
                 return new ObjectResult(await _catererService.GetByClinicID(clinicID));
             }
             catch (Exception ex)

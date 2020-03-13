@@ -21,9 +21,9 @@ namespace PetGreen.Domain.Entities
             CreatedAt = DateTime.UtcNow;
         }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
-        public string SocialReason { get; private set; }
+        public string SocialReason { get; set; }
 
         private string _TaxId;
 
@@ -36,26 +36,26 @@ namespace PetGreen.Domain.Entities
             }
         }
 
-        public string Email { get; private set; }
+        public string Email { get; set; }
 
-        public string Logo { get; private set; }
+        public string Logo { get; set; }
 
-        public string Site { get; private set; }
+        public string Site { get; set; }
 
-        public string Facebook { get; private set; }
+        public string Facebook { get; set; }
 
-        public IReadOnlyCollection<User> Users { get; private set; }
+        public virtual IReadOnlyCollection<User> Users { get; set; }
 
-        public IReadOnlyCollection<Contact> Contacts { get; private set; }
+        public IReadOnlyCollection<Contact> Contacts { get; set; }
 
-        public IReadOnlyCollection<Schedule> Schedules { get; private set; }
+        public IReadOnlyCollection<Schedule> Schedules { get; set; }
 
-        public IReadOnlyCollection<Caterer> Caterers { get; set; }
+        public virtual IReadOnlyCollection<Caterer> Caterers { get; set; }
 
         public Guid AddressID { get; set; }
 
         [NotMapped]
-        public virtual Address Address { get; private set; }
+        public virtual Address Address { get; set; }
 
         public void Update(DateTime? updatedAt, DateTime? deletedAt)
         {

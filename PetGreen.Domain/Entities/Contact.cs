@@ -32,6 +32,8 @@ namespace PetGreen.Domain.Entities
         public Guid? UserID { get; set; }
         public virtual User User {get; set; }
         public Guid? CatererID { get; set; }
+
+        [ForeignKey("CatererID")]
         public virtual Caterer Caterer { get; set; }
         public void Update(User user) => User = user;
     }

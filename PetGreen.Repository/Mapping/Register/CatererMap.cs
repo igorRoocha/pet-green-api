@@ -41,7 +41,13 @@ namespace PetGreen.Repository.Mapping.Register
 
             builder.HasMany(c => c.Contacts)
                    .WithOne(c => c.Caterer)
-                   .HasForeignKey(c => c.CatererID);
+                   .HasForeignKey(c => c.CatererID)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(c => c.Address)
+                   .WithOne(c => c.Caterer)
+                   .HasForeignKey(c => c.CatererID)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(c => c.CreatedAt)
                    .IsRequired()

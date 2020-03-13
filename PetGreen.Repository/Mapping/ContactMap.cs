@@ -27,8 +27,9 @@ namespace PetGreen.Repository.Mapping
                    .WithMany(c => c.Contacts)
                    .HasForeignKey(c => c.ClinicID);
 
-            builder.Ignore(c => c.User);
-            builder.Ignore(c => c.Clinic);
+            builder.HasOne(c => c.Caterer)
+                   .WithMany(c => c.Contacts)
+                   .HasForeignKey(c => c.CatererID);
         }
     }
 }

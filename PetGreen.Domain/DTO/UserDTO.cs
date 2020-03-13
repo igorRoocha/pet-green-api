@@ -14,7 +14,7 @@ namespace PetGreen.Domain.DTO
 
         public string Password { get; set; }
 
-        public Guid ClinicID { get; set; }
+        public Guid? ClinicID { get; set; }
 
         public List<Contact> Contacts { get; set; }
 

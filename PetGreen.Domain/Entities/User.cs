@@ -31,11 +31,13 @@ namespace PetGreen.Domain.Entities
         public virtual Profile Profile { get; set; }
 
         public Guid? ClinicID { get; set; }
+
+        [ForeignKey("ClinicID")]
         public virtual Clinic Clinic { get; set; }
 
         public IReadOnlyCollection<Contact> Contacts { get; set; }
 
-        public bool Active { get; private set; }
+        public bool Active { get; set; }
 
         public void Update(bool active) => Active = active;
 

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using PetGreen.Domain.Models;
 using PetGreen.Application.Validators;
 using PetGreen.Application.Services.Interfaces;
+using System;
 
 namespace PetGreen.Application.Services.Services
 {
@@ -56,7 +57,7 @@ namespace PetGreen.Application.Services.Services
                 catch
                 {
                     tran.Rollback();
-                    throw;
+                    throw new Exception();
                 }
             }
         }

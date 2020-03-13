@@ -10,6 +10,7 @@ namespace PetGreen.Domain.DTO
         public string Name { get; set; }
         public string TaxId { get; set; }
         public string Email { get; set; }
+        public string SocialReason { get; set; }
         public string Site { get; set; }
         public string Facebook { get; set; }
         public string Logo { get; set; }

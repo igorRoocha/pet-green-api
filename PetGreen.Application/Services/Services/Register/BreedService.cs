@@ -39,7 +39,7 @@ namespace PetGreen.Application.Services.Services.Register
                         return HttpStatusCode.Conflict;
 
                     breed.SpecieID = breed.Specie.ID;
-                    //breed.Specie = null;
+                    breed.Specie = null;
                     _baseService.Post<BreedValidator>(breed);
                     tran.Commit();
                     return HttpStatusCode.Created;

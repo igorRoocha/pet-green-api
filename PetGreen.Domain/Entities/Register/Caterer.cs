@@ -35,7 +35,7 @@ namespace PetGreen.Domain.Entities.Register
 
         public string Logo { get; set; }
 
-        public IReadOnlyCollection<Address> Addresses { get; set; }
+        public IReadOnlyCollection<Address> Address { get; set; }
 
         public IReadOnlyCollection<Contact> Contacts { get; set; }
 

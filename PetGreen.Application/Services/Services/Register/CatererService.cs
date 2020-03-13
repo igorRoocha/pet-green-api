@@ -5,29 +5,37 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using PetGreen.Domain.DTO.Register;
 using PetGreen.Application.Services.Validators.Register;
 using Microsoft.EntityFrameworkCore;
 using PetGreen.Application.Services.Interfaces.Register;
+using PetGreen.Application.Services.Validators;
+using PetGreen.Application.Validators;
+using PetGreen.Repository.Repositories.Register;
 
 namespace PetGreen.Application.Services.Services.Register
 {
-    public class CatererService: ICatererService
+    public class CatererService : ICatererService
     {
         private readonly BaseService<Caterer> _catererService;
+        private readonly BaseService<Contact> _bsContactService;
         private readonly BaseService<User> _userService;
+        private readonly BaseService<Address> _bsAddressService;
         private readonly AddressService _addressService;
         private readonly ContactService _contactService;
+        private readonly ContactRepository _contactRepository;
         private readonly Db _context;
 
         public CatererService(Db context)
         {
             _context = context;
             _addressService = new AddressService(context);
+            _bsAddressService = new BaseService<Address>(context);
+            _bsContactService = new BaseService<Contact>(context);
             _catererService = new BaseService<Caterer>(context);
             _contactService = new ContactService(context);
+            _contactRepository = new ContactRepository(context);
             _userService = new BaseService<User>(context);
         }
 
@@ -52,11 +60,12 @@ namespace PetGreen.Application.Services.Services.Register
                     if (CatererExists(caterer))
                         return HttpStatusCode.Conflict;
 
+                    caterer.Address = null;
                     _catererService.Post<CatererValidator>(caterer);
                     AddAddress(dto.Address, caterer.ID);
 
                     tran.Commit();
-                    return HttpStatusCode.Created;
+                    return HttpStatusCode.OK;
                 }
                 catch
                 {
@@ -66,6 +75,96 @@ namespace PetGreen.Application.Services.Services.Register
             }
         }
 
+        /// <summary>
+        /// Atualiza o fornecedor que está na tabela CDCaterer
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        public async Task<HttpStatusCode> Edit(CatererDTO dto)
+        {
+            using (var tran = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    Caterer caterer = await _catererService.Get(dto.ID);
+                    caterer = caterer.FillCaterer(caterer, dto);
+
+                    if (CatererExists(caterer))
+                        return HttpStatusCode.Conflict;
+
+                    caterer.Contacts = null;
+                    caterer.Address = null;
+                    _catererService.Put<CatererValidator>(caterer);
+
+                    EditAddress(dto);
+                    await EditContacts(dto);
+
+                    tran.Commit();
+                    return HttpStatusCode.OK;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Método responsável por atualizar os contatos que se referem ao fornecedor que está sendo atualizado
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        private async Task EditContacts(CatererDTO dto)
+        {
+            try
+            {
+                List<Contact> contactsOfCaterer = await _contactRepository.GetByCatererID(dto.ID);
+
+                foreach (Contact c in contactsOfCaterer)
+                    await _bsContactService.Remove(c.ID);
+
+                foreach (Contact contact in dto.Contacts)
+                {
+                    contact.ID = Guid.Empty;
+                    contact.CatererID = dto.ID;
+                    _bsContactService.Post<ContactValidator>(contact);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Método responsável por atualizar o endereço que se refere ao fornecedor que está sendo atualizado
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        private void EditAddress(CatererDTO dto)
+        {
+            try
+            {
+                foreach (Address address in dto.Address)
+                {
+                    address.CityID = address.City.ID;
+                    address.City.StateID = address.City.StateID;
+                    address.CatererID = dto.ID;
+                    _bsAddressService.Put<AddressValidator>(address);
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Método responsável por excluir um fornecedor do banco de dados
+        /// </summary>
+        /// <param name="clinicID"></param>
+        /// <returns></returns>
         public async Task Remove(Guid id)
         {
             using (var tran = _context.Database.BeginTransaction())
@@ -74,14 +173,14 @@ namespace PetGreen.Application.Services.Services.Register
                 {
                     Caterer caterer = await _context.Caterer
                                                 .AsNoTracking()
-                                                .Include(c => c.Addresses)
+                                                .Include(c => c.Address)
                                                 .Include(c => c.Contacts)
                                                 .Where(c => c.ID == id)
                                                 .FirstOrDefaultAsync();
 
-                    if(caterer != null)
+                    if (caterer != null)
                     {
-                        await _addressService.Remove(caterer.Addresses);
+                        await _addressService.Remove(caterer.Address);
                         await _contactService.Remove(caterer.Contacts);
                         await _catererService.Remove(caterer.ID);
                     }
@@ -109,7 +208,7 @@ namespace PetGreen.Application.Services.Services.Register
                 List<Caterer> caterers = await _context.Caterer
                                                     .AsNoTracking()
                                                     .Include(c => c.Clinic)
-                                                    .Include(c => c.Addresses)
+                                                    .Include(c => c.Address)
                                                         .ThenInclude(address => address.City)
                                                             .ThenInclude(city => city.State)
                                                     .Include(c => c.Contacts)
@@ -150,8 +249,9 @@ namespace PetGreen.Application.Services.Services.Register
             try
             {
                 caterer = (from c in _context.Caterer
-                          where c.TaxId == caterer.TaxId && c.ClinicID == caterer.ClinicID
-                          select c).FirstOrDefault();
+                           where c.TaxId == caterer.TaxId && c.ClinicID == caterer.ClinicID &&
+                                 c.ID != caterer.ID
+                           select c).FirstOrDefault();
 
                 if (caterer != null)
                     return true;
