@@ -16,11 +16,23 @@ namespace PetGreen.Repository.Mapping
                    .IsRequired()
                    .HasColumnName("Number");
 
+            builder.Property(c => c.ContactType)
+                    .HasColumnName("ContactType");
+
             builder.HasOne(c => c.User)
-                   .WithMany(c => c.Contacts);
+                   .WithMany(c => c.Contacts)
+                   .OnDelete(DeleteBehavior.Cascade)
+                   .HasForeignKey(c => c.UserID);
                 
             builder.HasOne(c => c.Clinic)
-                   .WithMany(c => c.Contacts);
+                   .WithMany(c => c.Contacts)
+                   .OnDelete(DeleteBehavior.Cascade)
+                   .HasForeignKey(c => c.ClinicID);
+
+            builder.HasOne(c => c.Caterer)
+                   .WithMany(c => c.Contacts)
+                   .OnDelete(DeleteBehavior.Cascade)
+                   .HasForeignKey(c => c.CatererID);
         }
     }
 }

@@ -6,6 +6,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <WarningLevel>3</WarningLevel>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +14,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Enum\" />
   </ItemGroup>
 
 </Project>

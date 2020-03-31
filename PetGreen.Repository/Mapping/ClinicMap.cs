@@ -33,15 +33,20 @@ namespace PetGreen.Repository.Mapping
             builder.Property(c => c.Facebook)
                    .HasColumnName("Facebook");
 
-            builder.HasMany(c => c.Users)
-                   .WithOne(c => c.Clinic);
-
-            builder.HasMany(c => c.MidiaSocial)
-                   .WithOne(c => c.Clinic);
-
             builder.HasMany(c => c.Schedules)
                    .WithOne(c => c.Clinic)
-                   .IsRequired();
+                   .HasForeignKey(c => c.ClinicID)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(c => c.Contacts)
+                   .WithOne(c => c.Clinic)
+                   .HasForeignKey(c => c.ClinicID)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(c => c.Address)
+                   .WithOne(c => c.Clinic)
+                   .HasForeignKey<Clinic>(c => c.AddressID)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(c => c.CreatedAt)
                    .IsRequired()

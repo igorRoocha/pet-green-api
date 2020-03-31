@@ -1,5 +1,4 @@
 using System.Net;
-using System.Reflection.Metadata;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -14,30 +13,29 @@ using PetGreen.Domain.Entities;
 using PetGreen.Repository.Context;
 using PetGreen.Domain.Models;
 using PetGreen.Domain.DTO;
-using PetGreen.Application.Services;
-using PetGreen.Application.Validators;
+using PetGreen.Application.Services.Services;
 
-namespace PetGreen.API.Controllers
+namespace PetGreenApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly BaseService<User> _userService;
-        private readonly BaseService<Contact> _contactService;
+        private readonly UserService _userService;
+        private readonly BaseService<User> _baseService;
         private readonly Db _context;
         private readonly IConfiguration _configuration;
 
         public UserController(Db context, IConfiguration configuration)
         {
             _context = context;
-            _userService = new BaseService<User>(context);
-            _contactService = new BaseService<Contact>(context);
+            _userService = new UserService(context);
+            _baseService = new BaseService<User>(context);
             _configuration = configuration;
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User login)
+        public async Task<IActionResult> Login([FromBody] UserDto login)
         {
             try
             {
@@ -69,6 +67,7 @@ namespace PetGreen.API.Controllers
                     Token = tokenHandler.WriteToken(tokenGeneretade),
                     Email = user.Email,
                     Name = user.Name,
+                    ClinicID = user.ClinicID != Guid.Empty && user.ClinicID != null ? (Guid)user.ClinicID : Guid.Empty,
                     Profile = user.Profile
                 });
             }
@@ -89,24 +88,7 @@ namespace PetGreen.API.Controllers
 
             try
             {
-                if (await (from r in _context.User where r.Email == dto.Email select r).FirstOrDefaultAsync() != null)
-                    return Conflict();
-
-                byte[] PasswordHash, PasswordSalt;
-                User user = new User();
-                Contact contact = new Contact(dto.Contact);
-
-                user = user.FillUser(user, dto);
-                Cryptography.CripPassword(user.Password, out PasswordHash, out PasswordSalt);
-                user.PasswordHash = PasswordHash;
-                user.PasswordSalt = PasswordSalt;
-                user.Password = null;
-                user.Profile = await (from p in _context.Profile where p.Description == "Gestor" select p).FirstOrDefaultAsync();
-                await _userService.Post<UserValidator>(user);
-
-                contact.Update(user);
-                await _contactService.Post<ContactValidator>(contact);
-
+                await _userService.Register(dto);
                 return StatusCode((int)HttpStatusCode.Created);
             }
             catch (ArgumentNullException ex)
@@ -120,11 +102,11 @@ namespace PetGreen.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] User user)
+        public IActionResult Put([FromBody] User user)
         {
             try
             {
-                await _userService.Put<UserValidator>(user);
+                //_userService.Put<UserValidator>(user);
                 return new ObjectResult(user);
             }
             catch (ArgumentNullException ex)
@@ -142,7 +124,7 @@ namespace PetGreen.API.Controllers
         {
             try
             {
-                await _userService.Remove(id);
+                //await _userService.Remove(id);
                 return new NoContentResult();
             }
             catch (ArgumentException ex)
@@ -160,7 +142,7 @@ namespace PetGreen.API.Controllers
         {
             try
             {
-                return new ObjectResult(await _userService.Get());
+                return new ObjectResult(await _baseService.Get());
             }
             catch (Exception ex)
             {

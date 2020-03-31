@@ -3,25 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PetGreen.Repository.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class x : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "CDClinicType",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
-                    Description = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CDClinicType", x => x.ID);
-                });
-
             migrationBuilder.CreateTable(
                 name: "CDProfile",
                 columns: table => new
@@ -35,6 +20,82 @@ namespace PetGreen.Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CDProfile", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CDSpecie",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: true),
+                    DeletedAt = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CDSpecie", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CDState",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: true),
+                    DeletedAt = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    UF = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CDState", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CDBreed",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: true),
+                    DeletedAt = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    SpecieID = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CDBreed", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_CDBreed_CDSpecie_SpecieID",
+                        column: x => x.SpecieID,
+                        principalTable: "CDSpecie",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CDCity",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: true),
+                    DeletedAt = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    IBGE = table.Column<string>(nullable: false),
+                    StateID = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CDCity", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_CDCity_CDState_StateID",
+                        column: x => x.StateID,
+                        principalTable: "CDState",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,39 +113,38 @@ namespace PetGreen.Repository.Migrations
                     Logo = table.Column<string>(nullable: true),
                     Site = table.Column<string>(nullable: true),
                     Facebook = table.Column<string>(nullable: true),
-                    ClinicTypeID = table.Column<Guid>(nullable: true)
+                    AddressID = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CDClinic", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_CDClinic_CDClinicType_ClinicTypeID",
-                        column: x => x.ClinicTypeID,
-                        principalTable: "CDClinicType",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CDMidiaSocial",
+                name: "CDCaterer",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: true),
                     DeletedAt = table.Column<DateTime>(nullable: true),
-                    URL = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    TaxId = table.Column<string>(nullable: false),
+                    SocialReason = table.Column<string>(nullable: false),
+                    StateRegistration = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: false),
+                    Logo = table.Column<string>(nullable: true),
                     ClinicID = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CDMidiaSocial", x => x.ID);
+                    table.PrimaryKey("PK_CDCaterer", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_CDMidiaSocial_CDClinic_ClinicID",
+                        name: "FK_CDCaterer_CDClinic_ClinicID",
                         column: x => x.ClinicID,
                         principalTable: "CDClinic",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -142,6 +202,39 @@ namespace PetGreen.Repository.Migrations
                         column: x => x.ProfileID,
                         principalTable: "CDProfile",
                         principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CDAddress",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: true),
+                    DeletedAt = table.Column<DateTime>(nullable: true),
+                    Cep = table.Column<string>(nullable: false),
+                    Number = table.Column<string>(nullable: false),
+                    Street = table.Column<string>(nullable: false),
+                    Neighborhood = table.Column<string>(nullable: false),
+                    Complement = table.Column<string>(nullable: true),
+                    CityID = table.Column<Guid>(nullable: false),
+                    CatererID = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CDAddress", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_CDAddress_CDCaterer_CatererID",
+                        column: x => x.CatererID,
+                        principalTable: "CDCaterer",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CDAddress_CDCity_CityID",
+                        column: x => x.CityID,
+                        principalTable: "CDCity",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -154,30 +247,69 @@ namespace PetGreen.Repository.Migrations
                     UpdatedAt = table.Column<DateTime>(nullable: true),
                     DeletedAt = table.Column<DateTime>(nullable: true),
                     Number = table.Column<string>(nullable: false),
+                    ContactType = table.Column<string>(nullable: true),
                     ClinicID = table.Column<Guid>(nullable: true),
-                    UserID = table.Column<Guid>(nullable: true)
+                    UserID = table.Column<Guid>(nullable: true),
+                    CatererID = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CDContact", x => x.ID);
                     table.ForeignKey(
+                        name: "FK_CDContact_CDCaterer_CatererID",
+                        column: x => x.CatererID,
+                        principalTable: "CDCaterer",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_CDContact_CDClinic_ClinicID",
                         column: x => x.ClinicID,
                         principalTable: "CDClinic",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CDContact_CDUser_UserID",
                         column: x => x.UserID,
                         principalTable: "CDUser",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CDClinic_ClinicTypeID",
+                name: "IX_CDAddress_CatererID",
+                table: "CDAddress",
+                column: "CatererID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CDAddress_CityID",
+                table: "CDAddress",
+                column: "CityID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CDBreed_SpecieID",
+                table: "CDBreed",
+                column: "SpecieID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CDCaterer_ClinicID",
+                table: "CDCaterer",
+                column: "ClinicID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CDCity_StateID",
+                table: "CDCity",
+                column: "StateID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CDClinic_AddressID",
                 table: "CDClinic",
-                column: "ClinicTypeID");
+                column: "AddressID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CDContact_CatererID",
+                table: "CDContact",
+                column: "CatererID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CDContact_ClinicID",
@@ -188,11 +320,6 @@ namespace PetGreen.Repository.Migrations
                 name: "IX_CDContact_UserID",
                 table: "CDContact",
                 column: "UserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CDMidiaSocial_ClinicID",
-                table: "CDMidiaSocial",
-                column: "ClinicID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CDSchedules_ClinicID",
@@ -208,30 +335,54 @@ namespace PetGreen.Repository.Migrations
                 name: "IX_CDUser_ProfileID",
                 table: "CDUser",
                 column: "ProfileID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_CDClinic_CDAddress_AddressID",
+                table: "CDClinic",
+                column: "AddressID",
+                principalTable: "CDAddress",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "CDContact");
+            migrationBuilder.DropForeignKey(
+                name: "FK_CDAddress_CDCaterer_CatererID",
+                table: "CDAddress");
 
             migrationBuilder.DropTable(
-                name: "CDMidiaSocial");
+                name: "CDBreed");
+
+            migrationBuilder.DropTable(
+                name: "CDContact");
 
             migrationBuilder.DropTable(
                 name: "CDSchedules");
 
             migrationBuilder.DropTable(
-                name: "CDUser");
+                name: "CDSpecie");
 
             migrationBuilder.DropTable(
-                name: "CDClinic");
+                name: "CDUser");
 
             migrationBuilder.DropTable(
                 name: "CDProfile");
 
             migrationBuilder.DropTable(
-                name: "CDClinicType");
+                name: "CDCaterer");
+
+            migrationBuilder.DropTable(
+                name: "CDClinic");
+
+            migrationBuilder.DropTable(
+                name: "CDAddress");
+
+            migrationBuilder.DropTable(
+                name: "CDCity");
+
+            migrationBuilder.DropTable(
+                name: "CDState");
         }
     }
 }

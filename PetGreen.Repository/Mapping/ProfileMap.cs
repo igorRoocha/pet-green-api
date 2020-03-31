@@ -17,7 +17,8 @@ namespace PetGreen.Repository.Mapping
                 .HasColumnName("Description");
 
             builder.HasMany(c => c.Users)
-                    .WithOne(c => c.Profile);
+                    .WithOne(c => c.Profile)
+                    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -10,39 +10,47 @@ namespace PetGreen.Repository.Mapping
         {
             builder.ToTable("CDUser");
 
-            builder.HasKey(c => c.ID);
+            builder.HasKey(u => u.ID);
 
-            builder.Property(c => c.Name)
+            builder.Property(u => u.Name)
                 .IsRequired()
                 .HasColumnName("Name");
 
-            builder.Property(c => c.Email)
+            builder.Property(u => u.Email)
                 .IsRequired()
                 .HasColumnName("Email");
 
-            builder.Property(c => c.PasswordHash)
+            builder.Property(u => u.PasswordHash)
                 .IsRequired()
                 .HasColumnName("PasswordHash");
 
-            builder.Property(c => c.PasswordSalt)
+            builder.Property(u => u.PasswordSalt)
                 .IsRequired()
                 .HasColumnName("PasswordSalt");
-            
-            builder.HasOne(x => x.Clinic)
-                    .WithMany(x => x.Users);
 
-            builder.HasOne(x => x.Profile)
-                   .WithMany(x => x.Users)
+            builder.HasOne(u => u.Clinic)
+                   .WithMany(u => u.Users)
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .HasForeignKey(u => u.ClinicID);
+
+            builder.HasMany(u => u.Contacts)
+                    .WithOne(u => u.User)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(u => u.Profile)
+                   .WithMany(u => u.Users)
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .HasForeignKey(u => u.ProfileID)
                    .IsRequired();
 
-            builder.Property(c => c.CreatedAt)
+            builder.Property(u => u.CreatedAt)
                 .IsRequired()
                 .HasColumnName("CreatedAt");
 
-            builder.Property(c => c.UpdatedAt)
+            builder.Property(u => u.UpdatedAt)
                 .HasColumnName("UpdateAt");
 
-            builder.Property(c => c.DeletedAt)
+            builder.Property(u => u.DeletedAt)
                 .HasColumnName("DeletedAt");
         }
     }

@@ -18,6 +18,10 @@ namespace PetGreen.Application.Validators
             RuleFor(c => c.Number)
              .NotEmpty().WithMessage("The number is empty.")
              .NotNull().WithMessage("The number is null.");
+
+            RuleFor(c => c.ContactType)
+             .NotEmpty().WithMessage("The contactType is empty.")
+             .NotNull().WithMessage("The contactType is null.");
         }
     }
 }
