@@ -9,6 +9,7 @@ using PetGreen.Application.Services.Services.Register;
 using PetGreen.Application.Services.Validators.Register;
 using PetGreen.Domain.Entities.Register;
 using PetGreen.Repository.Context;
+using System.Data.SqlClient;
 
 namespace PetGreenApi.Controllers.Register
 {
@@ -84,6 +85,11 @@ namespace PetGreenApi.Controllers.Register
             }
             catch (Exception ex)
             {
+                var sqlException = ex.InnerException as SqlException;
+
+                if (sqlException != null && sqlException.Number == 547)
+                    return StatusCode((int)HttpStatusCode.Conflict);
+
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
         }

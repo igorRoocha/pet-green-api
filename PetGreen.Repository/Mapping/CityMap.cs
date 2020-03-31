@@ -26,6 +26,7 @@ namespace PetGreen.Repository.Mapping
             builder.HasOne(c => c.State)
                    .WithMany(c => c.Cities)
                    .HasForeignKey(c => c.StateID)
+                   .OnDelete(DeleteBehavior.Restrict)
                    .IsRequired();
 
             builder.Property(c => c.CreatedAt)

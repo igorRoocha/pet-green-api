@@ -397,7 +397,8 @@ namespace PetGreen.Repository.Migrations
                 {
                     b.HasOne("PetGreen.Domain.Entities.Register.Caterer", "Caterer")
                         .WithMany("Address")
-                        .HasForeignKey("CatererID");
+                        .HasForeignKey("CatererID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PetGreen.Domain.Entities.City", "City")
                         .WithMany("Addresses")
@@ -410,7 +411,7 @@ namespace PetGreen.Repository.Migrations
                     b.HasOne("PetGreen.Domain.Entities.State", "State")
                         .WithMany("Cities")
                         .HasForeignKey("StateID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("PetGreen.Domain.Entities.Clinic", b =>
@@ -425,15 +426,18 @@ namespace PetGreen.Repository.Migrations
                 {
                     b.HasOne("PetGreen.Domain.Entities.Register.Caterer", "Caterer")
                         .WithMany("Contacts")
-                        .HasForeignKey("CatererID");
+                        .HasForeignKey("CatererID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PetGreen.Domain.Entities.Clinic")
+                    b.HasOne("PetGreen.Domain.Entities.Clinic", "Clinic")
                         .WithMany("Contacts")
-                        .HasForeignKey("ClinicID");
+                        .HasForeignKey("ClinicID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PetGreen.Domain.Entities.User")
+                    b.HasOne("PetGreen.Domain.Entities.User", "User")
                         .WithMany("Contacts")
-                        .HasForeignKey("UserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PetGreen.Domain.Entities.Register.Breed", b =>
@@ -441,7 +445,7 @@ namespace PetGreen.Repository.Migrations
                     b.HasOne("PetGreen.Domain.Entities.Register.Specie", "Specie")
                         .WithMany("Breeds")
                         .HasForeignKey("SpecieID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("PetGreen.Domain.Entities.Register.Caterer", b =>
@@ -449,7 +453,7 @@ namespace PetGreen.Repository.Migrations
                     b.HasOne("PetGreen.Domain.Entities.Clinic", "Clinic")
                         .WithMany("Caterers")
                         .HasForeignKey("ClinicID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("PetGreen.Domain.Entities.Schedule", b =>
@@ -464,12 +468,13 @@ namespace PetGreen.Repository.Migrations
                 {
                     b.HasOne("PetGreen.Domain.Entities.Clinic", "Clinic")
                         .WithMany("Users")
-                        .HasForeignKey("ClinicID");
+                        .HasForeignKey("ClinicID")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("PetGreen.Domain.Entities.Profile", "Profile")
                         .WithMany("Users")
                         .HasForeignKey("ProfileID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

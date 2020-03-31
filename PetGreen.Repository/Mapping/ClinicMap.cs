@@ -45,6 +45,7 @@ namespace PetGreen.Repository.Mapping
 
             builder.HasOne(c => c.Address)
                    .WithOne(c => c.Clinic)
+                   .HasForeignKey<Clinic>(c => c.AddressID)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(c => c.CreatedAt)

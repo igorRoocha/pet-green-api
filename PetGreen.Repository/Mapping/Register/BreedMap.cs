@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetGreen.Domain.Entities.Register;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PetGreen.Repository.Mapping.Register
 {
@@ -29,6 +26,7 @@ namespace PetGreen.Repository.Mapping.Register
             builder.HasOne(b => b.Specie)
                    .WithMany(b => b.Breeds)
                    .HasForeignKey(b => b.SpecieID)
+                   .OnDelete(DeleteBehavior.Restrict)
                    .IsRequired();
         }
     }

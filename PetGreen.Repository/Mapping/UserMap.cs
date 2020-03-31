@@ -30,6 +30,7 @@ namespace PetGreen.Repository.Mapping
 
             builder.HasOne(u => u.Clinic)
                    .WithMany(u => u.Users)
+                   .OnDelete(DeleteBehavior.Restrict)
                    .HasForeignKey(u => u.ClinicID);
 
             builder.HasMany(u => u.Contacts)
@@ -38,6 +39,7 @@ namespace PetGreen.Repository.Mapping
 
             builder.HasOne(u => u.Profile)
                    .WithMany(u => u.Users)
+                   .OnDelete(DeleteBehavior.Restrict)
                    .HasForeignKey(u => u.ProfileID)
                    .IsRequired();
 

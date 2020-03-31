@@ -41,11 +41,6 @@ namespace PetGreen.Repository.Mapping
             builder.HasOne(a => a.City)
                    .WithMany(c => c.Addresses)
                    .IsRequired();
-
-            builder.HasOne(c => c.Clinic)
-                   .WithOne(a => a.Address)
-                   .HasForeignKey<Clinic>(c => c.AddressID)
-                   .IsRequired();
         }
     }
 }

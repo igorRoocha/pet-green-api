@@ -96,8 +96,8 @@ namespace PetGreen.Application.Services.Services.Register
                     caterer.Address = null;
                     _catererService.Put<CatererValidator>(caterer);
 
-                    EditAddress(dto);
-                    await EditContacts(dto);
+                    _addressService.Edit(dto);
+                    await _contactService.Edit(dto);
 
                     tran.Commit();
                     return HttpStatusCode.OK;
@@ -107,56 +107,6 @@ namespace PetGreen.Application.Services.Services.Register
                     tran.Rollback();
                     throw;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Método responsável por atualizar os contatos que se referem ao fornecedor que está sendo atualizado
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        private async Task EditContacts(CatererDTO dto)
-        {
-            try
-            {
-                List<Contact> contactsOfCaterer = await _contactRepository.GetByCatererID(dto.ID);
-
-                foreach (Contact c in contactsOfCaterer)
-                    await _bsContactService.Remove(c.ID);
-
-                foreach (Contact contact in dto.Contacts)
-                {
-                    contact.ID = Guid.Empty;
-                    contact.CatererID = dto.ID;
-                    _bsContactService.Post<ContactValidator>(contact);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Método responsável por atualizar o endereço que se refere ao fornecedor que está sendo atualizado
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        private void EditAddress(CatererDTO dto)
-        {
-            try
-            {
-                foreach (Address address in dto.Address)
-                {
-                    address.CityID = address.City.ID;
-                    address.City.StateID = address.City.StateID;
-                    address.CatererID = dto.ID;
-                    _bsAddressService.Put<AddressValidator>(address);
-                }
-            }
-            catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
             }
         }
 

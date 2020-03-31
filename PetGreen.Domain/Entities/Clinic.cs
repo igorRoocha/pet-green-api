@@ -54,7 +54,6 @@ namespace PetGreen.Domain.Entities
 
         public Guid AddressID { get; set; }
 
-        [NotMapped]
         public virtual Address Address { get; set; }
 
         public void Update(DateTime? updatedAt, DateTime? deletedAt)

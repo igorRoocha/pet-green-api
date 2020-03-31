@@ -27,6 +27,7 @@ namespace PetGreen.Repository.Mapping
             builder.HasOne(s => s.Clinic)
                    .WithMany(s => s.Schedules)
                    .HasForeignKey(s => s.ClinicID)
+                   .OnDelete(DeleteBehavior.Cascade)
                    .IsRequired();
         }
     }

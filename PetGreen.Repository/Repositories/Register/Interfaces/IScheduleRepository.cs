@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace PetGreen.Repository.Repositories.Register.Interfaces
 {
-    public interface IContactRepository
+    public interface IScheduleRepository
     {
-        Task<List<Contact>> GetByCatererID(Guid catererID);
-        Task<List<Contact>> GetByClinicID(Guid clinicID);
+        Task<List<Schedule>> GetByClinicID(Guid clinicID);
     }
 }

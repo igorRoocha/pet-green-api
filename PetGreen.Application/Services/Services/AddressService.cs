@@ -1,5 +1,7 @@
 ﻿using PetGreen.Application.Services.Interfaces;
 using PetGreen.Application.Services.Validators;
+using PetGreen.Domain.DTO;
+using PetGreen.Domain.DTO.Register;
 using PetGreen.Domain.Entities;
 using PetGreen.Repository.Context;
 using System;
@@ -38,18 +40,20 @@ namespace PetGreen.Application.Services.Services
                 {
                     State state = (from s in _context.State where s.UF == address.City.State.UF select s).FirstOrDefault();
 
-                    if ( state == null)
+                    if (state == null)
                     {
                         _stateService.Post<StateValidator>(address.City.State);
                         address.City.StateID = address.City.State.ID;
-                    } else
+                    }
+                    else
                     {
                         address.City.StateID = state.ID;
                     }
 
                     _cityService.Post<CityValidator>(address.City);
                     address.CityID = address.City.ID;
-                } else
+                }
+                else
                 {
                     address.CityID = city.ID;
                 }
@@ -63,6 +67,48 @@ namespace PetGreen.Application.Services.Services
         }
 
         /// <summary>
+        /// Método responsável por atualizar o endereço que se refere ao fornecedor que está sendo atualizado
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        public void Edit(CatererDTO dto)
+        {
+            try
+            {
+                foreach (Address address in dto.Address)
+                {
+                    address.CityID = address.City.ID;
+                    address.City.StateID = address.City.StateID;
+                    address.CatererID = dto.ID;
+                    _baseService.Put<AddressValidator>(address);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Método responsável por atualizar o endereço que se refere a empresa que está sendo atualizado
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        public void Edit(ClinicDto dto)
+        {
+            try
+            {
+                dto.Address.CityID = dto.Address.City.ID;
+                dto.Address.City.StateID = dto.Address.City.StateID;
+                _baseService.Put<AddressValidator>(dto.Address);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Remove os registros de endereços que estão na tabela CDAddress
         /// </summary>
         /// <param name="addresses"></param>
@@ -70,7 +116,7 @@ namespace PetGreen.Application.Services.Services
         {
             try
             {
-                foreach(Address address in addresses)
+                foreach (Address address in addresses)
                 {
                     await _baseService.Remove(address.ID);
                 }

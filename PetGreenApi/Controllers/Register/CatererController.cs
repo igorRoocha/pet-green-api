@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using PetGreen.Application.Services.Services;
 using PetGreen.Application.Services.Services.Register;
 using PetGreen.Domain.DTO.Register;
-using PetGreen.Domain.Entities.Register;
+using PetGreen.Domain.Entities;
 using PetGreen.Repository.Context;
+using PetGreen.Repository.Repositories.Register;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace PetGreenApi.Controllers.Register
 {
@@ -19,6 +16,7 @@ namespace PetGreenApi.Controllers.Register
     public class CatererController : ControllerBase
     {
         private readonly CatererService _catererService;
+        private readonly UserRepository _userRepository;
         private readonly Db _context;
         private readonly IConfiguration _configuration;
 
@@ -26,6 +24,7 @@ namespace PetGreenApi.Controllers.Register
         {
             _context = context;
             _catererService = new CatererService(context);
+            _userRepository = new UserRepository(context);
             _configuration = configuration;
         }
 
@@ -61,13 +60,13 @@ namespace PetGreenApi.Controllers.Register
             }
         }
 
-        [HttpGet("getByClinicID")]
-        public async Task<IActionResult> GetByClinicID(Guid clinicID)
+        [HttpGet("getByUserID")]
+        public async Task<IActionResult> GetByUserID(Guid userID)
         {
             try
             {
-                var obj = await _catererService.GetByClinicID(clinicID);
-                return new ObjectResult(await _catererService.GetByClinicID(clinicID));
+                User user = await  _userRepository.Get(userID);
+                return new ObjectResult(await _catererService.GetByClinicID((Guid)user.ClinicID));
             }
             catch (Exception ex)
             {

@@ -37,6 +37,7 @@ namespace PetGreen.Repository.Mapping.Register
             builder.HasOne(c => c.Clinic)
                    .WithMany(c => c.Caterers)
                    .IsRequired()
+                   .OnDelete(DeleteBehavior.Restrict)
                    .HasForeignKey(c => c.ClinicID);
 
             builder.HasMany(c => c.Contacts)

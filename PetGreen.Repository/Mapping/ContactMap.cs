@@ -21,14 +21,17 @@ namespace PetGreen.Repository.Mapping
 
             builder.HasOne(c => c.User)
                    .WithMany(c => c.Contacts)
+                   .OnDelete(DeleteBehavior.Cascade)
                    .HasForeignKey(c => c.UserID);
                 
             builder.HasOne(c => c.Clinic)
                    .WithMany(c => c.Contacts)
+                   .OnDelete(DeleteBehavior.Cascade)
                    .HasForeignKey(c => c.ClinicID);
 
             builder.HasOne(c => c.Caterer)
                    .WithMany(c => c.Contacts)
+                   .OnDelete(DeleteBehavior.Cascade)
                    .HasForeignKey(c => c.CatererID);
         }
     }

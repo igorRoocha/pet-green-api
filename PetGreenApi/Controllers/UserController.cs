@@ -35,7 +35,7 @@ namespace PetGreenApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User login)
+        public async Task<IActionResult> Login([FromBody] UserDto login)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace PetGreenApi.Controllers
                     Token = tokenHandler.WriteToken(tokenGeneretade),
                     Email = user.Email,
                     Name = user.Name,
-                    ClinicID = user.ClinicID != Guid.Empty ? (Guid)user.ClinicID : Guid.Empty,
+                    ClinicID = user.ClinicID != Guid.Empty && user.ClinicID != null ? (Guid)user.ClinicID : Guid.Empty,
                     Profile = user.Profile
                 });
             }

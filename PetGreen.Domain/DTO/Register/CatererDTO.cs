@@ -1,12 +1,17 @@
-﻿using PetGreen.Domain.Entities;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using PetGreen.Domain.Entities;
 using PetGreen.Domain.Entities.Register;
+using PetGreen.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace PetGreen.Domain.DTO.Register
 {
     public class CatererDTO
     {
+        [JsonConverter(typeof(NullToDefaultConverter<Guid>))]
         public Guid ID { get; set; }
 
         public string Name { get; set; }
